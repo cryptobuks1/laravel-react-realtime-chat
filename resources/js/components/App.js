@@ -1,17 +1,16 @@
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import Login from "./Login";
+import Register from "./Register";
+import Landing from "./Landing";
+import Chat from "./ChatFunctional";
+import Store from "../Store";
 
-    import React, { Component } from 'react'
-    import ReactDOM from 'react-dom'
-    import { BrowserRouter, Route, Switch } from 'react-router-dom'
-    import Login from './Login'
-    import Register from './Register'
-    import Landing from './Landing'
-    import Chat from './Chat'
-
-
-    class App extends Component {
-      render () {
+const App = () => {
         return (
-          <BrowserRouter>
+            <Store>
+            <BrowserRouter>
             <div>
             <Switch>
               <Route exact path ="/" component={Landing}/>
@@ -21,8 +20,9 @@
             </Switch>
             </div>
           </BrowserRouter>
-        )
-      }
-    }
+            </Store>
+        );
+}
 
-    ReactDOM.render(<App />, document.getElementById('app'))
+
+ReactDOM.render(<App />, document.getElementById("app"));
