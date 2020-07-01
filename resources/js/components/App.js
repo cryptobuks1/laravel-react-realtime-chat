@@ -4,8 +4,9 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
 import Landing from "./Landing";
-import Chat from "./ChatFunctional";
+// import Chat from "./ChatFunctional";
 import Store from "../Store";
+import MainChat from "./Chat/MainChat";
 
 const App = () => {
         return (
@@ -14,7 +15,7 @@ const App = () => {
             <div>
             <Switch>
               <Route exact path ="/" component={Landing}/>
-              <Route exact path ="/chat" component={Chat}/>
+              <Route exact path ="/chat" component={MainChat}/>
               <Route exact path ="/login" component={Login}/>
               <Route exact path ="/register" component={Register}/>
             </Switch>

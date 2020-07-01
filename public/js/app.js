@@ -88974,26 +88974,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Login__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Login */ "./resources/js/components/Login.js");
 /* harmony import */ var _Register__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Register */ "./resources/js/components/Register.js");
 /* harmony import */ var _Landing__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Landing */ "./resources/js/components/Landing.js");
-/* harmony import */ var _ChatFunctional__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ChatFunctional */ "./resources/js/components/ChatFunctional.js");
-/* harmony import */ var _Store__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Store */ "./resources/js/Store.js");
+/* harmony import */ var _Store__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Store */ "./resources/js/Store.js");
+/* harmony import */ var _Chat_MainChat__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Chat/MainChat */ "./resources/js/components/Chat/MainChat.js");
 
 
 
 
 
+ // import Chat from "./ChatFunctional";
 
 
 
 
 var App = function App() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Store__WEBPACK_IMPORTED_MODULE_7__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["BrowserRouter"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Switch"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Store__WEBPACK_IMPORTED_MODULE_6__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["BrowserRouter"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Switch"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
     exact: true,
     path: "/",
     component: _Landing__WEBPACK_IMPORTED_MODULE_5__["default"]
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
     exact: true,
     path: "/chat",
-    component: _ChatFunctional__WEBPACK_IMPORTED_MODULE_6__["default"]
+    component: _Chat_MainChat__WEBPACK_IMPORTED_MODULE_7__["default"]
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
     exact: true,
     path: "/login",
@@ -89009,10 +89010,10 @@ react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEB
 
 /***/ }),
 
-/***/ "./resources/js/components/ChatFunctional.js":
-/*!***************************************************!*\
-  !*** ./resources/js/components/ChatFunctional.js ***!
-  \***************************************************/
+/***/ "./resources/js/components/Chat/ChatDmList.js":
+/*!****************************************************!*\
+  !*** ./resources/js/components/Chat/ChatDmList.js ***!
+  \****************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -89020,9 +89021,9 @@ react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEB
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Store */ "./resources/js/Store.js");
+/* harmony import */ var _Store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Store */ "./resources/js/Store.js");
 /* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/index.js");
-/* harmony import */ var laravel_echo__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! laravel-echo */ "./node_modules/laravel-echo/dist/echo.js");
+/* harmony import */ var _helpers_selectRecepient__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./helpers/selectRecepient */ "./resources/js/components/Chat/helpers/selectRecepient.js");
 var _this = undefined;
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
@@ -89042,95 +89043,34 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var Chat = function Chat() {
+var ChatDmList = function ChatDmList(props) {
   var _useContext = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Store__WEBPACK_IMPORTED_MODULE_1__["Context"]),
       _useContext2 = _slicedToArray(_useContext, 2),
       state = _useContext2[0],
       dispatch = _useContext2[1];
 
-  var myToken = localStorage.getItem("LRC_Token");
-  var fakeGeneralChannel = {
-    "id": 5,
-    "type": "channel"
-  };
-  var headers = {
+  var token = localStorage.getItem("LRC_Token");
+  var postHeaders = {
     headers: {
-      "Authorization": "Bearer " + myToken
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json"
+    }
+  };
+  var getHeaders = {
+    headers: {
+      Authorization: "Bearer " + token
     }
   };
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    axios.get("/api/auth/user", headers).then(function (res) {
-      // if(res.status === 201) {
-      console.log(res.data);
-      dispatch({
-        type: "IS_AUTH",
-        payload: res.data
-      }); // }
-    })["catch"](function (err) {});
-    window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
-    window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_3__["default"]({
-      broadcaster: 'pusher',
-      key: "websocketkey",
-      wsHost: window.location.hostname,
-      wsPort: 6001,
-      disableStats: true,
-      forceTLS: false
-    });
-    window.Echo.connector.options.auth.headers['Authorization'] = 'Bearer ' + myToken;
-    window.Echo.options.auth = {
-      headers: {
-        Authorization: 'Bearer ' + myToken
-      }
-    };
-    window.Echo.join('chat');
-    axios.get("/api/dmUsers", headers).then(function (res) {
+    axios.get("/api/allusers", getHeaders).then(function (res) {
       dispatch({
         type: "GET_DM_USERS",
         payload: res.data
       });
     })["catch"](function (err) {});
-    channelSelect(fakeGeneralChannel);
   }, []);
 
-  var messageList = function messageList() {
-    var messages = state.messages; // console.log(typeof(messages));
-
-    var messagelist = messages.map(function (value, index) {
-      // console.log(value)
-      if (value.status === true) {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_2__["Col"], {
-          className: "my-3",
-          key: index,
-          sm: "6",
-          md: {
-            size: 8,
-            offset: 3
-          }
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, value.user.name), " has ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-          className: "text-primary"
-        }, value.message), " the channel");
-      } else {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_2__["Col"], {
-          key: index
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, value.user.name, "  < ", value.user.email, "  >  :"), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), " ", value.message);
-      }
-    });
-    return messagelist;
-  };
-
-  var userList = function userList() {
-    var users = state.usersInRoom; // console.log(typeof(users));
-
-    var userList = users.map(function (value, index) {
-      console.log(value);
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-        key: index
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, value.name));
-    });
-    return userList;
-  };
-
-  var allUserList = function allUserList() {
+  var DirectMessageUserList = function DirectMessageUserList() {
     console.log("CURRENT USER BELOW ");
     console.log(state.currUser);
     var users = state.dmUsers.filter(function (u) {
@@ -89151,102 +89091,134 @@ var Chat = function Chat() {
   var dmSelect = function dmSelect(id, event) {
     event.stopPropagation();
     console.log(id);
-    window.Echo.leave('chat.channel.5');
+    window.Echo.leave("chat.channel.5");
     var body = "{ \"receiver\": ".concat(id, " }");
-    var headers = {
-      headers: {
-        "Content-Type": "application/json"
-      }
-    };
-    axios.defaults.headers.common["Authorization"] = "Bearer " + myToken;
-    console.log(body);
-    axios.post("/api/directmessage", body, headers).then(function (res) {
-      console.log(res.data);
-      dispatch({
-        type: "SET_SELECTED_CHANNEL",
-        payload: res.data
-      });
-      dispatch({
-        type: "CLEAR_MESSAGES",
-        payload: []
-      });
-      getMessages();
-      window.Echo.join("chat.dm.".concat(state.selectedChannel.id)).listen("MessageSent", function (event) {
-        console.log(event);
-        var message = {
-          user: event.user,
-          message: event.message.message
-        };
-        dispatch({
-          type: "ADD_MESSAGE",
-          payload: message
-        });
-      });
-    })["catch"](function (err) {
-      var errors = err.response.data.errors;
-      console.log(errors);
-      Object.values(errors).map(function (error) {
-        console.log(error.toString());
-      });
-    });
+
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(SelectRecepient, null);
   };
 
-  var channelSelect = function channelSelect(selectedChannel, event) {
-    if (event !== undefined) {
-      event.stopPropagation();
-    }
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_2__["Col"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Direct Message"), DirectMessageUserList()));
+};
 
+/* harmony default export */ __webpack_exports__["default"] = (ChatDmList);
+
+/***/ }),
+
+/***/ "./resources/js/components/Chat/MainChat.js":
+/*!**************************************************!*\
+  !*** ./resources/js/components/Chat/MainChat.js ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Store */ "./resources/js/Store.js");
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/index.js");
+/* harmony import */ var _ChatDmList__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ChatDmList */ "./resources/js/components/Chat/ChatDmList.js");
+/* harmony import */ var laravel_echo__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! laravel-echo */ "./node_modules/laravel-echo/dist/echo.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+
+
+var MainChat = function MainChat() {
+  var _useContext = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Store__WEBPACK_IMPORTED_MODULE_1__["Context"]),
+      _useContext2 = _slicedToArray(_useContext, 2),
+      state = _useContext2[0],
+      dispatch = _useContext2[1];
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    var myToken = localStorage.getItem("LRC_Token");
+    window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
+    window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_4__["default"]({
+      broadcaster: 'pusher',
+      key: "websocketkey",
+      wsHost: window.location.hostname,
+      wsPort: 6001,
+      disableStats: true,
+      forceTLS: false
+    });
+    window.Echo.connector.options.auth.headers['Authorization'] = 'Bearer ' + myToken;
+    window.Echo.options.auth = {
+      headers: {
+        Authorization: 'Bearer ' + myToken
+      }
+    };
+    window.Echo.join('chat');
+  }, []);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_2__["Container"], {
+    fluid: "true"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ChatDmList__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    echo: window.Echo
+  })));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (MainChat);
+
+/***/ }),
+
+/***/ "./resources/js/components/Chat/helpers/selectRecepient.js":
+/*!*****************************************************************!*\
+  !*** ./resources/js/components/Chat/helpers/selectRecepient.js ***!
+  \*****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Store */ "./resources/js/Store.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+ // import getMessages from "./getMessages";
+
+var selectReceptient = function selectReceptient(body, postHeaders) {
+  var _useContext = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_Store__WEBPACK_IMPORTED_MODULE_1__["Context"]),
+      _useContext2 = _slicedToArray(_useContext, 2),
+      state = _useContext2[0],
+      dispatch = _useContext2[1];
+
+  axios.post("/api/directmessage", body, postHeaders).then(function (res) {
+    console.log(res.data);
     dispatch({
       type: "SET_SELECTED_CHANNEL",
-      payload: selectedChannel
+      payload: res.data
     });
     dispatch({
       type: "CLEAR_MESSAGES",
       payload: []
     });
     getMessages();
-    console.log("SELECTED CHANNEL IN channelSelect()");
-    console.log(state.selectedChannel);
-    window.Echo.join("chat.channel.".concat(state.selectedChannel.id)).here(function (users) {
-      dispatch({
-        type: "GET_USERS_IN_ROOM",
-        payload: users
-      });
-    }).joining(function (user) {
-      dispatch({
-        type: "ADD_USER_TO_ROOM",
-        payload: user
-      });
-      var message = {
-        user: user,
-        message: "Joined",
-        status: true
-      };
-
-      if (state.selectedChannel.type === "channel") {
-        dispatch({
-          type: "ADD_MESSAGE",
-          payload: message
-        });
-      }
-    }).leaving(function (user) {
-      dispatch({
-        type: "USER_LEAVES_ROOM",
-        payload: user
-      });
-      var message = {
-        user: user,
-        message: "Left",
-        status: true
-      };
-
-      if (state.selectedChannel.type === "channel") {
-        dispatch({
-          type: "ADD_MESSAGE",
-          payload: message
-        });
-      }
-    }).listen("MessageSent", function (event) {
+    window.Echo.join("chat.dm.".concat(state.selectedChannel.id)).listen("MessageSent", function (event) {
       console.log(event);
       var message = {
         user: event.user,
@@ -89257,107 +89229,16 @@ var Chat = function Chat() {
         payload: message
       });
     });
-  };
-
-  var onLogout = function onLogout() {
-    var headers = {
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + myToken
-      }
-    };
-    axios.get("/api/auth/logout", headers).then(function (res) {
-      if (res.status === 200) {
-        window.Echo.disconnect();
-        localStorage.removeItem("LRC_Token"); // setState({
-        //   redirect: true
-        // })
-
-        props.history.push("/login");
-      }
-    })["catch"](function (err) {});
-  };
-
-  var onChange = function onChange(e) {
-    dispatch({
-      type: "SET_MESSAGE",
-      payload: e.target.value
+  })["catch"](function (err) {
+    var errors = err.response.data.errors;
+    console.log(errors);
+    Object.values(errors).map(function (error) {
+      console.log(error.toString());
     });
-  }; // Calls action to register user
-
-
-  var sendMessage = function sendMessage(e) {
-    e.preventDefault();
-    var message = state.message;
-    var channel_id = state.selectedChannel.id;
-    console.log(state.selectedChannel.id);
-    var body = JSON.stringify({
-      message: message,
-      channel_id: channel_id
-    });
-    var headers = {
-      headers: {
-        "Content-Type": "application/json"
-      }
-    };
-    axios.defaults.headers.common["Authorization"] = "Bearer " + myToken;
-    console.log(body);
-    axios.post("/api/messages", body, headers).then(function (res) {
-      console.log(res);
-    })["catch"](function (err) {
-      var errors = err.response.data.errors;
-      console.log(errors);
-      Object.values(errors).map(function (error) {
-        console.log(error.toString());
-      });
-    });
-  };
-
-  var getMessages = function getMessages() {
-    var headers = {
-      headers: {
-        "Authorization": "Bearer " + myToken
-      }
-    };
-    console.log("CURRENTLY SELECTED CHANNEL BELOW");
-    console.log(state.selectedChannel.id);
-    axios.get("/api/messages/".concat(state.selectedChannel.id), headers).then(function (res) {
-      console.log("GET MESSAGES OUTPUT BELOW");
-      console.log(res.data);
-      var messages = res.data;
-      dispatch({
-        type: "GET_MESSAGES",
-        payload: messages
-      });
-    })["catch"](function (err) {});
-  };
-
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_2__["Container"], {
-    fluid: "true"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_2__["Row"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_2__["Col"], {
-    xs: "3"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Channels"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_2__["Col"], null, " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
-    onClick: channelSelect.bind(_this, fakeGeneralChannel),
-    id: "5",
-    key: "5"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, " General")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Direct Message"), allUserList), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_2__["Col"], {
-    xs: "6"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Chat Homepage"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
-    onClick: onLogout
-  }, "Logout"), messageList, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_2__["InputGroup"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_2__["Input"], {
-    onChange: onChange,
-    id: "message",
-    name: "message"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_2__["InputGroupAddon"], {
-    addonType: "append"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
-    onClick: sendMessage
-  }, "Send ")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_2__["Col"], {
-    xs: "3"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Users in this Room"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, userList)))));
+  });
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Chat);
+/* harmony default export */ __webpack_exports__["default"] = (selectReceptient);
 
 /***/ }),
 
